@@ -8,7 +8,8 @@ import java.time.format.DateTimeFormatter;
 public class LoggerClass {
 
 	static String pfad = "Logs/";
-	static String dateiname = "SessionLog-" + dateiName() + ".txt";
+	//static String dateiname = "SessionLog-" + dateiName() + ".txt";
+	static String dateiname = "SessionLogs.txt";
 	static String komplettPfad = pfad + dateiname;
 
 	static String dateiName(){
@@ -55,15 +56,36 @@ public class LoggerClass {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-
-
+	}
+	public static void logsOpenClose(String operation){
+		try {
+			FileWriter log = new FileWriter(komplettPfad,true);
+			log.write("\n-------------------------------------------------------------" +
+					"\n Sesion " + operation + " at " + getZeitDate());
+			log.close();
+		} catch (IOException e) {
+			throw new RuntimeException("Fehler beim schreiben in der Logdatei",e);
+		}
 	}
 
-	public static void logger(String w1, String w2, double wechselkuers, String mengue, String ergebnis){
+	public static void logger(int count, String w1, String w2, String wechselkuers, double mengue, double zielbretrag){
 
 		try {
 			FileWriter log = new FileWriter(komplettPfad,true);
-			log.write("\nOperation" + getZeit() + " -> AusgangW: " + w1 + " / ZielW: " + w2 + "    | Wechselkurs:" + wechselkuers + "| Mengue: " + mengue + " | Betrag: " + ergebnis);
+			log.write("\n=> Operation "+ count + getZeit() + "\n-> AusgangW: " + w1 + " ZielW: " + w2 +
+					"\nWechselkurs: " + wechselkuers +
+					"\nMengue: " + mengue +
+					"\nBetrag: " + zielbretrag);
+			log.close();
+		} catch (IOException e) {
+			throw new RuntimeException("Fehler beim schreiben in der Logdatei",e);
+		}
+	}
+	public static void JSONlogger(String JSON){
+
+		try {
+			FileWriter log = new FileWriter(komplettPfad,true);
+			log.write("\n-" + JSON);
 			log.close();
 		} catch (IOException e) {
 			throw new RuntimeException("Fehler beim schreiben in der Logdatei",e);

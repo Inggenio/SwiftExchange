@@ -85,16 +85,53 @@ public class APIManager {
 		}
 		throw new RuntimeException("'result' not found");
 	}
-	public static String getWechselKurs(){
-		return "";
+	public static String getWechselKurs(String json){
+		try {
+			String marker = "\"quote\":";
+			int index = json.indexOf(marker);
+
+			if (index != -1) {
+				int start = index + marker.length();
+				int end = json.indexOf("}", start); // cierra el objeto
+				if (end == -1) end = json.length();
+
+				return json.substring(start, end).trim();
+			} else {
+				System.err.println("⚠️ 'quote' not found in response: " + json);
+				return "error";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
 	}
-	public static String getZielBetrag(){
-		return "";
+	public String getZielBetrag(String json) {
+		try {
+			String marker = "\"result\":";
+			int index = json.indexOf(marker);
+
+			if (index != -1) {
+				int start = index + marker.length();
+				int end = json.indexOf("}", start); // cierra el objeto
+				if (end == -1) end = json.length();
+
+				return json.substring(start, end).trim();
+			} else {
+				System.err.println("⚠️ 'result' not found in response: " + json);
+				return "error";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
 	}
 	public static String[] waehrungen = {
 			"Bitte wählen",
+			"ARS 	Argentine Peso",
+			"AUD 	Australian Dollar",
 			"EUR 	Euro",
 			"GBP 	British Pound Sterling",
+			"JPY 	Japanese Yen",
 			"USD 	United States Dollar",
 			"AED 	United Arab Emirates Dirham",
 			"AFN 	Afghan Afghani",
@@ -102,8 +139,6 @@ public class APIManager {
 			"AMD 	Armenian Dram",
 			"ANG 	Netherlands Antillean Guilder",
 			"AOA 	Angolan Kwanza",
-			"ARS 	Argentine Peso",
-			"AUD 	Australian Dollar",
 			"AWG 	Aruban Florin",
 			"AZN 	Azerbaijani Manat",
 			"BAM 	Bosnia-Herzegovina Convertible Mark",
@@ -166,7 +201,6 @@ public class APIManager {
 			"JEP 	Jersey Pound",
 			"JMD 	Jamaican Dollar",
 			"JOD 	Jordanian Dinar",
-			"JPY 	Japanese Yen",
 			"KES 	Kenyan Shilling",
 			"KGS 	Kyrgystani Som",
 			"KHR 	Cambodian Riel",

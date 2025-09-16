@@ -3,11 +3,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 public class GUI {
 	double zielBetrag;
 	double wechselsWert;
-	double mengue;
+	double amount;
 
 	JFrame meinFenster = new JFrame("W-hrung");
 	JPanel panel = new JPanel();
@@ -33,7 +36,7 @@ public class GUI {
 	int wah2 = wahrung2Liste.getSelectedIndex();
 
 	JLabel wechsekurs = new JLabel("Wechselkurs");
-	JLabel wechsel = new JLabel(Logik.fetchWechselKurs());
+	JLabel wechsel = new JLabel("");
 	/*
 	JLabel wechsel = new JLabel(String.valueOf(Logik.getWechselWert(wah1,wah2)));
 	*/
@@ -43,7 +46,7 @@ public class GUI {
 	//Ziel Betrag
 
 	JLabel zielBetragLabel = new JLabel("Betrag in Zielwährung");
-	JLabel zielBetragWert = new JLabel(APIManager.getZielBetrag());
+	JLabel zielBetragWert = new JLabel();
 
 	JButton info = new JButton("i");
 
@@ -85,15 +88,17 @@ public class GUI {
 		gbc.gridy = 1;
 		panel.add(wahrung1Liste, gbc);
 
-		//Währung 2
+		//MengueFeld
 		gbc.gridx = 0;
 		gbc.gridy = 2;
-		wahrung2T.setForeground(Color.LIGHT_GRAY);
-		panel.add(wahrung2T, gbc);
+		mengeLabel.setForeground(Color.LIGHT_GRAY);
+		panel.add(mengeLabel, gbc);
 
+		gbc.weightx = 1.0;
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		panel.add(wahrung2Liste, gbc);
+		mengueField.setForeground(Color.BLACK);
+		panel.add(mengueField, gbc);
 
 		//Wechselkurs
 		wechsel.setFont(myFont.deriveFont(20f));
@@ -107,18 +112,15 @@ public class GUI {
 		wechsel.setForeground(Color.LIGHT_GRAY);
 		panel.add(wechsel, gbc);
 
-		//MengueFeld
+		//Währung 2
 		gbc.gridx = 0;
 		gbc.gridy = 4;
-		mengeLabel.setForeground(Color.LIGHT_GRAY);
-		panel.add(mengeLabel, gbc);
+		wahrung2T.setForeground(Color.LIGHT_GRAY);
+		panel.add(wahrung2T, gbc);
 
-
-		gbc.weightx = 1.0;
 		gbc.gridx = 1;
 		gbc.gridy = 4;
-		mengueField.setForeground(Color.BLACK);
-		panel.add(mengueField, gbc);
+		panel.add(wahrung2Liste, gbc);
 
 		//Berechnen Knopf
 		gbc.gridx = 1;
@@ -137,6 +139,7 @@ public class GUI {
 		gbc.gridx = 1;
 		gbc.gridy = 6;
 		zielBetragWert.setForeground(Color.ORANGE);
+		zielBetragWert.setFont(new Font("SansSerif", Font.PLAIN, 14));
 		panel.add(zielBetragWert, gbc);
 
 		/*
@@ -155,93 +158,17 @@ public class GUI {
 		meinFenster.setVisible(true);
 		meinFenster.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		/*
-		//Action Listener
-		ActionListener wechselAktualisieren = new ActionListener() {
+		ActionListener apiBerechnung2 = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				wah1 = wahrung1Liste.getSelectedIndex();
-				wah2 = wahrung2Liste.getSelectedIndex();
-				wechselsWert = APIManager.getWechselWert(wah1, wah2);
-				wechsel.setText(String.valueOf(wechselsWert));
-			}
-		};
-		wahrung1Liste.addActionListener(wechselAktualisieren);
-		wahrung2Liste.addActionListener(wechselAktualisieren);
+				// Tomar las monedas de los JComboBox
+				String fromCurrency = wahrung1Liste.getSelectedItem().toString();
+				String toCurrency   = wahrung2Liste.getSelectedItem().toString();
+				String from = fromCurrency.substring(0, 3);
+				String to   = toCurrency.substring(0, 3);
 
-		 */
-
-		//Action Listener viejo
-		/*
-		ActionListener berechnung = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				try {
-					int wah1 = wahrung1Liste.getSelectedIndex();
-					int wah2 = wahrung2Liste.getSelectedIndex();
-					String eingabe = mengueField.getText().replace(",",".");
-					double betrag = Double.parseDouble(eingabe);
-
-					if (betrag < 0) {
-						zielBetragWert.setText("Betrag darf nicht negativ sein");
-						return;
-					}
-					DecimalFormat df = new DecimalFormat("#.00");
-					double ergebnis = Logik.zielBetragBerechnen(wah1, wah2, betrag);
-
-					//Ergebnis
-					zielBetragWert.setText(df.format(ergebnis) + " " + Logik.getWaerungenSymbol(wah2));
-
-				} catch (NumberFormatException ex) {
-					zielBetragWert.setText("Betrag Ungültig");
-				}
-				LoggerClass.logger(
-						Logik.getWaerungenSymbol(wah1),
-						Logik.getWaerungenSymbol(wah2),
-						Logik.getWechselWert(wah1,wah2),
-						mengueField.getText(),
-						zielBetragWert.getText());
-				mengueField.setText("");
-			}
-		};
-		mengueField.addActionListener(berechnung);
-		knopf.addActionListener(berechnung);
-
-		meinFenster.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				LoggerClass.closer();
-				super.windowClosing(e);
-			}
-		});
-
-		 */
-		ActionListener apiBerechnung = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Tomar las Monedas de los Campos y pasar a String
-
-				String from  = wahrung1Liste.getSelectedItem().toString();
-				String to  = wahrung2Liste.getSelectedItem().toString();
-				if(!from.equalsIgnoreCase("Bitte wählen") || !to.equalsIgnoreCase("Bitte wählen")){
-					from = from.substring(0,3);
-					to = to.substring(0,3);
-				} else {
-					JOptionPane.showMessageDialog(
-							null,
-							"Bitte Aus- und Zielwährung wählen.",
-							"Währungen auswählen",
-							JOptionPane.WARNING_MESSAGE
-					);
-				}
-
-				//Amount Field. With Try/Catch to avoid false amounts
-				mengueField.setText(String.valueOf(1.00));
-				mengue = 0.0;
+				// Leer campo de cantidad
 				String text = mengueField.getText().trim();
-
-			// Leer Feld validierung
 				if (text.isEmpty()) {
 					JOptionPane.showMessageDialog(
 							null,
@@ -252,27 +179,138 @@ public class GUI {
 					return;
 				}
 
+				// Convertir a double
+				double amount;
 				try {
-					// reemplazar coma por punto (por si el usuario escribe , en lugar de .)
-					text = text.replace(",", ".");
-					mengue = Double.parseDouble(text);
+					text = text.replace(",", "."); // soporta coma o punto
+					amount = Double.parseDouble(text);
 				} catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(
 							null,
-							"Por favor ingresa un número válido.",
-							"Error de formato",
+							"Bitte einen gültigen Zahl eintragen.",
+							"Format Fehler",
 							JOptionPane.ERROR_MESSAGE
 					);
 					return;
 				}
 
-				//Imprimir
-				System.out.println("From=" + from +"/" + "to=" + to);
+				// Validar monedas seleccionadas
+				if (fromCurrency.equalsIgnoreCase("Bitte wählen") || toCurrency.equalsIgnoreCase("Bitte wählen")) {
+					JOptionPane.showMessageDialog(
+							null,
+							"Bitte Aus- und Zielwährung wählen.",
+							"Währungen auswählen",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
 
-				//API Request
-				String myApiKey = APIKeyLoader.loadApiKey();
-				APIManager request = new APIManager(myApiKey);
-				System.out.println(request.convert(from,to, mengue));
+				// Llamada a la API
+				try {
+					String myApiKey = APIKeyLoader.loadApiKey();
+					APIManager request = new APIManager(myApiKey);
+
+					String jsonResponse = request.convert(from, to, amount);
+					System.out.println(jsonResponse);
+
+					// Obtener el resultado
+					String zielBetragStr = request.getZielBetrag(jsonResponse);
+					double zielBetragDouble = Double.parseDouble(zielBetragStr);
+
+					// Formatear con espacios y 2 decimales
+					DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+					symbols.setGroupingSeparator(' ');
+					symbols.setDecimalSeparator('.');
+					DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
+					String formatted = df.format(zielBetragDouble);
+
+					// Asignar al JLabel
+					zielBetragWert.setText(formatted + " " + toCurrency);
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(
+							null,
+							"Fehler bei der Verbindung zur API:\n" + ex.getMessage(),
+							"API Fehler",
+							JOptionPane.ERROR_MESSAGE
+					);
+				}
+			}
+		};
+		knopf.addActionListener(apiBerechnung2);
+
+
+		ActionListener apiBerechnung = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				String fromCurrency  = wahrung1Liste.getSelectedItem().toString();
+				String toCurrency    = wahrung2Liste.getSelectedItem().toString();
+				String from = fromCurrency.substring(0,3);
+				String to   = toCurrency.substring(0,3);
+				int count = 0;
+
+				// Leer Feld validierung
+				String text = mengueField.getText().trim();
+				if (text.isEmpty()) {
+					JOptionPane.showMessageDialog(
+							null,
+							"Bitte eine Menge eingeben.",
+							"Menge Feld ist Leer",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
+
+				double amount;
+				try {
+					text = text.replace(",", ".");
+					amount = Double.parseDouble(text);
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(
+							null,
+							"Bitte einen gültigen Zahl eintragen.",
+							"Format Fehler",
+							JOptionPane.ERROR_MESSAGE
+					);
+					return;
+				}
+
+				System.out.println("From=" + from + " / To=" + to);
+
+				if(!fromCurrency.equalsIgnoreCase("Bitte wählen") && !toCurrency.equalsIgnoreCase("Bitte wählen")) {
+					try {
+						String myApiKey = APIKeyLoader.loadApiKey();
+						APIManager request = new APIManager(myApiKey);
+
+						String jsonResponse = request.convert(from, to, amount);
+						System.out.println(jsonResponse);
+						count++;
+						String zielBetrag = request.getZielBetrag(jsonResponse);
+						wechsel.setText(request.getWechselKurs(jsonResponse));
+						zielBetragWert.setText(zielBetrag + " " + toCurrency);
+						LoggerClass.logger(count,from,to,wechsel.getText(),zielBetrag,amount);
+
+
+
+					} catch (Exception ex) {
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(
+								null,
+								"Fehler bei der Verbindung zur API:\n" + ex.getMessage(),
+								"API Fehler",
+								JOptionPane.ERROR_MESSAGE
+						);
+					}
+				} else {
+					JOptionPane.showMessageDialog(
+							null,
+							"Bitte Aus- und Zielwährung wählen.",
+							"Währungen auswählen",
+							JOptionPane.WARNING_MESSAGE
+					);
+				}
 			}
 		};
 		knopf.addActionListener(apiBerechnung);
