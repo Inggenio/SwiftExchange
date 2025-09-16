@@ -3,13 +3,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.text.DecimalFormat;
 
 public class GUI {
 	double zielBetrag;
 	double wechselsWert;
+	double mengue;
 
 	JFrame meinFenster = new JFrame("W-hrung");
 	JPanel panel = new JPanel();
@@ -21,29 +19,31 @@ public class GUI {
 
 	//Währung 1
 	JLabel wahrung1Label = new JLabel("Ausgangswährung");
-	JComboBox wahrung1Liste = new JComboBox(Logik.waehrungen);
+	JComboBox wahrung1Liste = new JComboBox(APIManager.waehrungen);
 
 	//Wärung 2
 	JLabel wahrung2T = new JLabel("Zielwährung");
-	JComboBox wahrung2Liste = new JComboBox(Logik.waehrungen);
+	JComboBox wahrung2Liste = new JComboBox(APIManager.waehrungen);
 
 	//Menge
-	JLabel menge = new JLabel("Ausgangsbetrag");
+	JLabel mengeLabel = new JLabel("Ausgangsbetrag");
 	JTextField mengueField = new JTextField(30);
 
 	int wah1 = wahrung1Liste.getSelectedIndex();
 	int wah2 = wahrung2Liste.getSelectedIndex();
 
 	JLabel wechsekurs = new JLabel("Wechselkurs");
+	JLabel wechsel = new JLabel(Logik.fetchWechselKurs());
+	/*
 	JLabel wechsel = new JLabel(String.valueOf(Logik.getWechselWert(wah1,wah2)));
-
+	*/
 	//Berechnen Button
 	JButton knopf = new JButton("Berechnen");
 
 	//Ziel Betrag
 
 	JLabel zielBetragLabel = new JLabel("Betrag in Zielwährung");
-	JLabel zielBetragWert = new JLabel(String.valueOf(Logik.zielBetragBerechnen(wah1,wah2,zielBetrag)));
+	JLabel zielBetragWert = new JLabel(APIManager.getZielBetrag());
 
 	JButton info = new JButton("i");
 
@@ -110,8 +110,8 @@ public class GUI {
 		//MengueFeld
 		gbc.gridx = 0;
 		gbc.gridy = 4;
-		menge.setForeground(Color.LIGHT_GRAY);
-		panel.add(menge, gbc);
+		mengeLabel.setForeground(Color.LIGHT_GRAY);
+		panel.add(mengeLabel, gbc);
 
 
 		gbc.weightx = 1.0;
@@ -155,20 +155,24 @@ public class GUI {
 		meinFenster.setVisible(true);
 		meinFenster.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+		/*
 		//Action Listener
 		ActionListener wechselAktualisieren = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				wah1 = wahrung1Liste.getSelectedIndex();
 				wah2 = wahrung2Liste.getSelectedIndex();
-				wechselsWert = Logik.getWechselWert(wah1, wah2);
+				wechselsWert = APIManager.getWechselWert(wah1, wah2);
 				wechsel.setText(String.valueOf(wechselsWert));
 			}
 		};
 		wahrung1Liste.addActionListener(wechselAktualisieren);
 		wahrung2Liste.addActionListener(wechselAktualisieren);
 
+		 */
 
+		//Action Listener viejo
+		/*
 		ActionListener berechnung = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -211,6 +215,68 @@ public class GUI {
 				super.windowClosing(e);
 			}
 		});
+
+		 */
+		ActionListener apiBerechnung = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//Tomar las Monedas de los Campos y pasar a String
+
+				String from  = wahrung1Liste.getSelectedItem().toString();
+				String to  = wahrung2Liste.getSelectedItem().toString();
+				if(!from.equalsIgnoreCase("Bitte wählen") || !to.equalsIgnoreCase("Bitte wählen")){
+					from = from.substring(0,3);
+					to = to.substring(0,3);
+				} else {
+					JOptionPane.showMessageDialog(
+							null,
+							"Bitte Aus- und Zielwährung wählen.",
+							"Währungen auswählen",
+							JOptionPane.WARNING_MESSAGE
+					);
+				}
+
+				//Amount Field. With Try/Catch to avoid false amounts
+				mengueField.setText(String.valueOf(1.00));
+				mengue = 0.0;
+				String text = mengueField.getText().trim();
+
+			// Leer Feld validierung
+				if (text.isEmpty()) {
+					JOptionPane.showMessageDialog(
+							null,
+							"Bitte eine Menge eingeben.",
+							"Menge Feld ist Leer",
+							JOptionPane.WARNING_MESSAGE
+					);
+					return;
+				}
+
+				try {
+					// reemplazar coma por punto (por si el usuario escribe , en lugar de .)
+					text = text.replace(",", ".");
+					mengue = Double.parseDouble(text);
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(
+							null,
+							"Por favor ingresa un número válido.",
+							"Error de formato",
+							JOptionPane.ERROR_MESSAGE
+					);
+					return;
+				}
+
+				//Imprimir
+				System.out.println("From=" + from +"/" + "to=" + to);
+
+				//API Request
+				String myApiKey = APIKeyLoader.loadApiKey();
+				APIManager request = new APIManager(myApiKey);
+				System.out.println(request.convert(from,to, mengue));
+			}
+		};
+		knopf.addActionListener(apiBerechnung);
+
 	}
 
 }

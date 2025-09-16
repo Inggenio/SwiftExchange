@@ -1,7 +1,7 @@
 
 public class Logik {
 
-	public static String[] waehrungen = {
+	/*
 			"(EUR) Euro ",
 			"(GBP) Britisches Pfund ",
 			"(CHF) Schweizer Franken ",
@@ -10,27 +10,25 @@ public class Logik {
 			"(SEK) Schwedische Krone ",
 			"(PLN) Polnischer Złoty ",
 			"(ARS) Argentinischer Peso",
-			"(USD) US-Dollar"
-	};
+			"(USD) US-Dollar",
+			 */
+
+
 	public static String getWaerungenSymbol(int s) {
-		String[] symbols = {
-				"€",
-				"£",
-				"CHF",
-				"kr",
-				"kr",
-				"kr",
-				"zł",
-				"$",
-				"US$",
-		};
-		return symbols[s];
+		return "";
+	}
+	public static String fetchWechselKurs(){
+
+		return "";
 	}
 
-	public static String getWaehrung(int a){
+	/*
+	public static String getWaehrungName(int a){
 		return waehrungen[a].toString();
 	}
 
+	 */
+	/*
 	static Double[][] werte = {
 			{ 1.00	 ,0.86  ,0.97	,7.46	,11.35	,11.65	,4.31	,930.00 ,1.07	}, //EUR
 			{ 1.17	 ,1.00  ,1.13	,8.66	,13.15	,13.55  ,5.01	,1080.00,1.25	}, //GBP
@@ -43,13 +41,14 @@ public class Logik {
 			{0.93	,0.80	,0.91	,6.96	,10.50	,10.80	,4.00	,1280.00,1.00	} //USD
 			// EUR    | GBP   | CHF   | DKK   | NOK   | SEK   | PLN	| ARS	|USD  |
 	};
+	*/
 
-	public static double getWechselWert(int a, int b){
-		return werte[a][b];
-	}
+	/*
 	public static double zielBetragBerechnen(int a, int b, double mengue){
 		return getWechselWert(a,b) * mengue;
 	}
+
+	 */
 
 
 
