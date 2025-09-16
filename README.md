@@ -8,7 +8,7 @@ SwiftExchange is a currency conversion program built on top of the W-hrung proje
 
 📋 Double-table currency handling (based on W-hrung).
 
-📝 Built-in logging system to keep track of all requests.
+📝 Built-in logging system to keep track of all requests..
 
 ## Requirements
 
