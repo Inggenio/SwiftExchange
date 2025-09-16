@@ -28,7 +28,7 @@ public class LoggerClass {
 		LocalDateTime jetztDateUhr = LocalDateTime.now();
 		return jetztDateUhr.format(formatterZeit);
 	}
-
+	//Metodo que escribe los Logs
 	public static void dataLog(){
 
 		File log = new File(pfad);
