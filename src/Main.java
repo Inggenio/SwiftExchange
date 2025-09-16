@@ -3,7 +3,7 @@ public class Main {
 
 		GUI programm = new GUI();
 		programm.go();
-		LoggerClass.dataLog();
+		LoggerClass.logsOpenClose("started");
 
 	}
 }
