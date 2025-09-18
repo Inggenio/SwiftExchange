@@ -6,20 +6,27 @@ SwiftExchange is a currency conversion program built on top of the W-hrung proje
 
 🔄 Real-time exchange rates from Forex-Exchange.
 
-📋 Double-table currency handling (based on W-hrung).
-
-📝 Built-in logging system to keep track of all requests..
+📝 Built-in logging system to keep track of all requests
 
 ## Requirements
 
-An API key from Forex-Exchange. You have to make an account and get a Free API-Key with 100 free Requests a month
+An API key from Exchange.host. You have to make an account and get a Free API-Key with 100 free Requests a month
 
+## What I learned
+- How to make API requests and integrate them into my code.
 
+- That it’s not always as simple as copying an example and pasting it into your project.
+
+- Sometimes changing even a small part of a working request can break it — I once spent two hours fixing a bug I introduced this way.
 ## Roadmap / Future Improvements
 
 -🌍 Multi-language support.
 
+📦 JSON parsing with external libraries (instead of manual handling).
+
 -🔑 In-app method to securely save and manage the API key.
+
+- Logger function can be in a SQL parsed
 
 ## Available Currencies
 
