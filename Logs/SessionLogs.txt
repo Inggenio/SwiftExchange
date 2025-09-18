@@ -1,0 +1,119 @@
+Sesion started at 16.09.2025 - 22:41:37
+Operation22:41:59 -> AusgangW: ARS / ZielW: EUR    | Wechselkurs: 0.000574| Mengue: 574 | Betrag: 1000000.0
+Sesion started at 16.09.2025 - 22:42:55
+Sesion started at 16.09.2025 - 22:43:05
+Sesion started at 16.09.2025 - 22:53:41
+Sesion started at 16.09.2025 - 22:55:26
+----------------------------------------------------------------
+- Operation22:55:44 -> AusgangW: ARS / ZielW: EUR    | Wechselkurs: 0.000574| Mengue: 0.574 | Betrag: 1000.0
+----------------------------------------------------------------
+- Operation22:56:01 -> AusgangW: ARS / ZielW: EUR    | Wechselkurs: 0.000574| Mengue: 574 | Betrag: 1000000.0
+Sesion started at 16.09.2025 - 22:59:41
+- Operation22:59:51 -> AusgangW: ARS ZielW: USD    | Wechselkurs: 0.000681| Mengue: 0.083763 | Betrag: 123.0
+-{"success":true,"terms":"https:\/\/currencylayer.com\/terms","privacy":"https:\/\/currencylayer.com\/privacy","query":{"from":"ARS","to":"USD","amount":123},"info":{"timestamp":1758056344,"quote":0.000681},"result":0.083763}
+-------------------------------------------------------------
+ Sesion started at 16.09.2025 - 23:03:08
+- Operation 123:03:15
+-> AusgangW: AUD ZielW: ARS    | Wechselkurs: 982.209634| Mengue: 120811.784982 | Betrag: 123.0
+- Operation 123:03:28
+-> AusgangW: EUR ZielW: ARS    | Wechselkurs: 1743.782105| Mengue: 1743782.105 | Betrag: 1000.0
+-------------------------------------------------------------
+ Sesion started at 16.09.2025 - 23:11:58
+=> Operation 123:12:08
+-> AusgangW: EUR ZielW: ARS
+Wechselkurs: 
+Mengue: 0.0
+Betrag: 1500.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 21:46:39
+=> Operation 121:47:09
+-> AusgangW: ARS ZielW: USD
+Wechselkurs: 0.000678
+Mengue: 0.678
+Betrag: 1000.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 21:51:40
+=> Operation 121:51:51
+-> AusgangW: ARS ZielW: USD
+Wechselkurs: error
+Mengue: error
+Betrag: 1000.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 21:57:30
+=> Operation 121:57:39
+-> AusgangW: ARS ZielW: EUR
+Wechselkurs: error
+Mengue: error
+Betrag: 12345.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:00:13
+=> Operation 122:00:22
+-> AusgangW: ARS ZielW: EUR
+Wechselkurs: error
+Mengue: error
+Betrag: 1500.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:00:40
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:05:47
+=> Operation 122:05:54
+-> AusgangW: ARS ZielW: AUD
+Wechselkurs: error
+Mengue: error
+Betrag: 1.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:15:58
+=> Operation 122:16:07
+-> AusgangW: ARS ZielW: AUD
+Wechselkurs: error
+Mengue: error
+Betrag: 123.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:19:02
+=> Operation 122:19:10
+-> AusgangW: ARS ZielW: ARS
+Wechselkurs: error
+Mengue: error
+Betrag: 1234.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:23:30
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:25:58
+=> Operation 122:26:13
+-> AusgangW: ARS ZielW: USD
+Wechselkurs: error
+Mengue: error
+Betrag: 1231234.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:29:24
+=> Operation 122:29:33
+-> AusgangW: ARS ZielW: EUR
+Wechselkurs: 
+Mengue: error
+Betrag: 123.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:32:01
+=> Operation 122:32:15
+-> AusgangW: ARS ZielW: EUR
+Wechselkurs: 
+Mengue: error
+Betrag: 1234.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:33:19
+=> Operation 122:33:27
+-> AusgangW: AUD ZielW: ARS
+Wechselkurs: 
+Mengue: 1203182.594876
+Betrag: 1234.0
+-------------------------------------------------------------
+ Sesion started at 18.09.2025 - 22:33:52
+=> Operation 122:34:08
+-> AusgangW: AUD ZielW: AUD
+Wechselkurs: 1
+Mengue: 1231231
+Betrag: 1231231.0
+=> Operation 122:34:25
+-> AusgangW: AUD ZielW: ARS
+Wechselkurs: 975.086135
+Mengue: 1200556277.082185
+Betrag: 1231231.0

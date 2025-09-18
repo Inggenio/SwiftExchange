@@ -68,7 +68,7 @@ public class LoggerClass {
 		}
 	}
 
-	public static void logger(int count, String w1, String w2, String wechselkuers, double mengue, double zielbretrag){
+	public static void logger(int count, String w1, String w2, String wechselkuers, String mengue, double zielbretrag){
 
 		try {
 			FileWriter log = new FileWriter(komplettPfad,true);

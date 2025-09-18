@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -17,12 +18,25 @@ public class APIManager {
 		StringBuilder result = new StringBuilder();
 		try {
 			// URL Build (con API key)
-			String urlString = BASE_URL + "convert" + "?from=" + from + "&to=" + to + "&amount=" + amount + "&access_key=" + apiKey;
+			String urlString = BASE_URL + "convert"
+					+ "?from=" 	+ from
+					+ "&to="	+ to
+					+ "&amount=" + amount
+					+ "&access_key=" + apiKey;
 			URL url = new URL(urlString);
+			System.out.println(url);
 
 			// Connection
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
+
+			//API Fehler
+			int status = conn.getResponseCode();
+			if (status == 429) {
+				throw new IOException("Zu viele Anfragen an die API (HTTP 429). Warte kurz und probiere nochmal.");
+			} else if (status != 200) {
+				throw new IOException("API Fehler: HTTP " + status);
+			}
 
 			// Response Read
 			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -41,37 +55,8 @@ public class APIManager {
 		}
 		return "error!";
 	}
-	public String getWechselKurs(String from, String to) {
-		StringBuilder result = new StringBuilder();
-		try {
-			// URL Build (con API key)
-			String urlString = BASE_URL + "latest?from=" + from + "&to=" + to + "&access_key=" + apiKey;
-			URL url = new URL(urlString);
 
-			// Connection
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-
-			// Response Read
-			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				result.append(line);
-			}
-			reader.close();
-			System.out.println(urlString);
-			// Parsear el JSON
-			//return parseResult(result.toString());
-			return result.toString();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "error!";
-	}
-
-
-	private double parseResult(String json) {
+	private double parseJsonResult(String json) {
 		String marker = "\"result\":";
 		int index = json.indexOf(marker);
 		if (index != -1) {
@@ -85,7 +70,7 @@ public class APIManager {
 		}
 		throw new RuntimeException("'result' not found");
 	}
-	public static String getWechselKurs(String json){
+	public static String parseJsonQuote(String json){
 		try {
 			String marker = "\"quote\":";
 			int index = json.indexOf(marker);

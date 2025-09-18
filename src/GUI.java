@@ -3,9 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 
 public class GUI {
 	double zielBetrag;
@@ -158,89 +155,6 @@ public class GUI {
 		meinFenster.setVisible(true);
 		meinFenster.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		ActionListener apiBerechnung2 = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Tomar las monedas de los JComboBox
-				String fromCurrency = wahrung1Liste.getSelectedItem().toString();
-				String toCurrency   = wahrung2Liste.getSelectedItem().toString();
-				String from = fromCurrency.substring(0, 3);
-				String to   = toCurrency.substring(0, 3);
-
-				// Leer campo de cantidad
-				String text = mengueField.getText().trim();
-				if (text.isEmpty()) {
-					JOptionPane.showMessageDialog(
-							null,
-							"Bitte eine Menge eingeben.",
-							"Menge Feld ist Leer",
-							JOptionPane.WARNING_MESSAGE
-					);
-					return;
-				}
-
-				// Convertir a double
-				double amount;
-				try {
-					text = text.replace(",", "."); // soporta coma o punto
-					amount = Double.parseDouble(text);
-				} catch (NumberFormatException ex) {
-					JOptionPane.showMessageDialog(
-							null,
-							"Bitte einen gültigen Zahl eintragen.",
-							"Format Fehler",
-							JOptionPane.ERROR_MESSAGE
-					);
-					return;
-				}
-
-				// Validar monedas seleccionadas
-				if (fromCurrency.equalsIgnoreCase("Bitte wählen") || toCurrency.equalsIgnoreCase("Bitte wählen")) {
-					JOptionPane.showMessageDialog(
-							null,
-							"Bitte Aus- und Zielwährung wählen.",
-							"Währungen auswählen",
-							JOptionPane.WARNING_MESSAGE
-					);
-					return;
-				}
-
-				// Llamada a la API
-				try {
-					String myApiKey = APIKeyLoader.loadApiKey();
-					APIManager request = new APIManager(myApiKey);
-
-					String jsonResponse = request.convert(from, to, amount);
-					System.out.println(jsonResponse);
-
-					// Obtener el resultado
-					String zielBetragStr = request.getZielBetrag(jsonResponse);
-					double zielBetragDouble = Double.parseDouble(zielBetragStr);
-
-					// Formatear con espacios y 2 decimales
-					DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-					symbols.setGroupingSeparator(' ');
-					symbols.setDecimalSeparator('.');
-					DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
-					String formatted = df.format(zielBetragDouble);
-
-					// Asignar al JLabel
-					zielBetragWert.setText(formatted + " " + toCurrency);
-
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					JOptionPane.showMessageDialog(
-							null,
-							"Fehler bei der Verbindung zur API:\n" + ex.getMessage(),
-							"API Fehler",
-							JOptionPane.ERROR_MESSAGE
-					);
-				}
-			}
-		};
-		knopf.addActionListener(apiBerechnung2);
-
-
 		ActionListener apiBerechnung = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -252,8 +166,8 @@ public class GUI {
 				int count = 0;
 
 				// Leer Feld validierung
-				String text = mengueField.getText().trim();
-				if (text.isEmpty()) {
+				String amountText = mengueField.getText().trim();
+				if (amountText.isEmpty()) {
 					JOptionPane.showMessageDialog(
 							null,
 							"Bitte eine Menge eingeben.",
@@ -265,8 +179,8 @@ public class GUI {
 
 				double amount;
 				try {
-					text = text.replace(",", ".");
-					amount = Double.parseDouble(text);
+					amountText = amountText.replace(",", ".");
+					amount = Double.parseDouble(amountText);
 				} catch (NumberFormatException ex) {
 					JOptionPane.showMessageDialog(
 							null,
@@ -278,6 +192,8 @@ public class GUI {
 				}
 
 				System.out.println("From=" + from + " / To=" + to);
+				System.out.println(amountText);
+				System.out.println(amount);
 
 				if(!fromCurrency.equalsIgnoreCase("Bitte wählen") && !toCurrency.equalsIgnoreCase("Bitte wählen")) {
 					try {
@@ -285,14 +201,17 @@ public class GUI {
 						APIManager request = new APIManager(myApiKey);
 
 						String jsonResponse = request.convert(from, to, amount);
+						//String jsonResponse = request.getWechselKurs(from, to);
 						System.out.println(jsonResponse);
 						count++;
+
+						//Data Arrangement for the Logger Class
 						String zielBetrag = request.getZielBetrag(jsonResponse);
-						wechsel.setText(request.getWechselKurs(jsonResponse));
-						zielBetragWert.setText(zielBetrag + " " + toCurrency);
+						wechsel.setText(request.parseJsonQuote(jsonResponse));
+						zielBetragWert.setText(request.parseJsonQuote(jsonResponse));
+
+						//The Data we pass it onto the Logger Method in the Logger class
 						LoggerClass.logger(count,from,to,wechsel.getText(),zielBetrag,amount);
-
-
 
 					} catch (Exception ex) {
 						ex.printStackTrace();
