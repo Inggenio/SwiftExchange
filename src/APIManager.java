@@ -56,7 +56,7 @@ public class APIManager {
 		return "error!";
 	}
 
-	private double parseJsonResult(String json) {
+	public static String parseJsonResult(String json) {
 		String marker = "\"result\":";
 		int index = json.indexOf(marker);
 		if (index != -1) {
@@ -65,8 +65,7 @@ public class APIManager {
 			if (end == -1) {
 				end = json.indexOf("}", start);
 			}
-			String value = json.substring(start, end).trim();
-			return Double.parseDouble(value);
+			return json.substring(start, end).trim();
 		}
 		throw new RuntimeException("'result' not found");
 	}
@@ -90,7 +89,7 @@ public class APIManager {
 			return "error";
 		}
 	}
-	public String getZielBetrag(String json) {
+	public String getQuery(String json) {
 		try {
 			String marker = "\"result\":";
 			int index = json.indexOf(marker);

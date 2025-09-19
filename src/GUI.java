@@ -27,25 +27,22 @@ public class GUI {
 
 	//Menge
 	JLabel mengeLabel = new JLabel("Ausgangsbetrag");
-	JTextField mengueField = new JTextField(30);
+	JTextField mengueFeld = new JTextField(30);
 
-	int wah1 = wahrung1Liste.getSelectedIndex();
-	int wah2 = wahrung2Liste.getSelectedIndex();
+	JLabel wechselKursLabel = new JLabel("Wechselkurs");
+	JLabel wechselKursFeld = new JLabel("");
 
-	JLabel wechsekurs = new JLabel("Wechselkurs");
-	JLabel wechsel = new JLabel("");
-	/*
-	JLabel wechsel = new JLabel(String.valueOf(Logik.getWechselWert(wah1,wah2)));
-	*/
-	//Berechnen Button
-	JButton knopf = new JButton("Berechnen");
+	//Knöpfe
+	JButton knopfBerechnen = new JButton("Berechnen");
+	JButton knopfSprache = new JButton("Sprache");
+	JButton knopfAPIKey = new JButton("API Key");
+	JButton info = new JButton("i");
 
 	//Ziel Betrag
-
 	JLabel zielBetragLabel = new JLabel("Betrag in Zielwährung");
 	JLabel zielBetragWert = new JLabel();
 
-	JButton info = new JButton("i");
+
 
 	public void go() {
 
@@ -94,20 +91,20 @@ public class GUI {
 		gbc.weightx = 1.0;
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		mengueField.setForeground(Color.BLACK);
-		panel.add(mengueField, gbc);
+		mengueFeld.setForeground(Color.BLACK);
+		panel.add(mengueFeld, gbc);
 
 		//Wechselkurs
-		wechsel.setFont(myFont.deriveFont(20f));
+		wechselKursFeld.setFont(myFont.deriveFont(20f));
 		gbc.gridx = 0;
 		gbc.gridy = 3;
-		wechsekurs.setForeground(Color.LIGHT_GRAY);
-		panel.add(wechsekurs, gbc);
+		wechselKursLabel.setForeground(Color.LIGHT_GRAY);
+		panel.add(wechselKursLabel, gbc);
 
 		gbc.gridx = 1;
 		gbc.gridy = 3;
-		wechsel.setForeground(Color.LIGHT_GRAY);
-		panel.add(wechsel, gbc);
+		wechselKursFeld.setForeground(Color.LIGHT_GRAY);
+		panel.add(wechselKursFeld, gbc);
 
 		//Währung 2
 		gbc.gridx = 0;
@@ -122,8 +119,8 @@ public class GUI {
 		//Berechnen Knopf
 		gbc.gridx = 1;
 		gbc.gridy = 5;
-		knopf.setForeground(Color.DARK_GRAY);
-		panel.add(knopf, gbc);
+		knopfBerechnen.setForeground(Color.DARK_GRAY);
+		panel.add(knopfBerechnen, gbc);
 
 
 		//ZielBetrag
@@ -166,7 +163,7 @@ public class GUI {
 				int count = 0;
 
 				// Leer Feld validierung
-				String amountText = mengueField.getText().trim();
+				String amountText = mengueFeld.getText().trim();
 				if (amountText.isEmpty()) {
 					JOptionPane.showMessageDialog(
 							null,
@@ -200,18 +197,17 @@ public class GUI {
 						String myApiKey = APIKeyLoader.loadApiKey();
 						APIManager request = new APIManager(myApiKey);
 
-						String jsonResponse = request.convert(from, to, amount);
-						//String jsonResponse = request.getWechselKurs(from, to);
-						System.out.println(jsonResponse);
+						String jsonQuery = request.convert(from, to, amount);
+						System.out.println(jsonQuery);
 						count++;
 
 						//Data Arrangement for the Logger Class
-						String zielBetrag = request.getZielBetrag(jsonResponse);
-						wechsel.setText(request.parseJsonQuote(jsonResponse));
-						zielBetragWert.setText(request.parseJsonQuote(jsonResponse));
+						String zielBetrag = request.parseJsonResult(jsonQuery);
+						wechselKursFeld.setText(request.parseJsonQuote(jsonQuery));
+						zielBetragWert.setText(zielBetrag);
 
 						//The Data we pass it onto the Logger Method in the Logger class
-						LoggerClass.logger(count,from,to,wechsel.getText(),zielBetrag,amount);
+						LoggerClass.operationLogger(count,from,to, wechselKursFeld.getText(),zielBetrag,amount);
 
 					} catch (Exception ex) {
 						ex.printStackTrace();
@@ -232,7 +228,7 @@ public class GUI {
 				}
 			}
 		};
-		knopf.addActionListener(apiBerechnung);
+		knopfBerechnen.addActionListener(apiBerechnung);
 
 	}
 

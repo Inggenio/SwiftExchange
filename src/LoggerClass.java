@@ -24,7 +24,7 @@ public class LoggerClass {
 		return jetztUhr.format(formatterZeit);
 	}
 
-	static String getZeitDate(){
+	static String getZeitUndDate(){
 		DateTimeFormatter formatterZeit = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm:ss");
 		LocalDateTime jetztDateUhr = LocalDateTime.now();
 		return jetztDateUhr.format(formatterZeit);
@@ -51,7 +51,7 @@ public class LoggerClass {
 		FileWriter logKopf = null;
 		try {
 			logKopf = new FileWriter(komplettPfad,true);
-			logKopf.write("Session Log um " + getZeitDate() + " geöffnet\n Operation Log:\n");
+			logKopf.write("Session Log um " + getZeitUndDate() + " geöffnet\n Operation Log:\n");
 			logKopf.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
@@ -61,18 +61,19 @@ public class LoggerClass {
 		try {
 			FileWriter log = new FileWriter(komplettPfad,true);
 			log.write("\n-------------------------------------------------------------" +
-					"\n Sesion " + operation + " at " + getZeitDate());
+					"\n Sesion " + operation + " at " + getZeitUndDate());
 			log.close();
 		} catch (IOException e) {
 			throw new RuntimeException("Fehler beim schreiben in der Logdatei",e);
 		}
 	}
 
-	public static void logger(int count, String w1, String w2, String wechselkuers, String mengue, double zielbretrag){
+	public static void operationLogger(int count, String w1, String w2, String wechselkuers, String mengue, double zielbretrag){
 
 		try {
 			FileWriter log = new FileWriter(komplettPfad,true);
-			log.write("\n=> Operation "+ count + getZeit() + "\n-> AusgangW: " + w1 + " ZielW: " + w2 +
+			log.write("\n=> Operation "+ count +" am " + getZeit() +
+					"\n-> AusgangW: " + w1 + "//  ZielW: " + w2 +
 					"\nWechselkurs: " + wechselkuers +
 					"\nMengue: " + mengue +
 					"\nBetrag: " + zielbretrag);
@@ -95,7 +96,7 @@ public class LoggerClass {
 	public static void closer(){
 		try (FileWriter closer = new FileWriter(komplettPfad, true)) {
 
-			closer.write("\n\nSession um " + getZeitDate() + " geschlossen");
+			closer.write("\n\nSession um " + getZeitUndDate() + " geschlossen");
 		} catch (IOException e) {
 			throw new RuntimeException("Fehler beim schreiben in der Logdatei",e);
 		}
